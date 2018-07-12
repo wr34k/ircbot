@@ -10,13 +10,12 @@ import ircEvents
 
 from log import Colors, Log
 from mircformat import MIRCFormat
-from ircReload import recompile
 from ircCommands import IrcCommands
 
 
 class IrcBot(object):
 
-    def __init__(self, nickname, username, realname, server, port, use_ssl, channels, optkey, DEBUG):
+    def __init__(self, nickname, username, realname, server, port, use_ssl, channels, master, optkey, DEBUG):
         self.sock           = None
         self.ep             = None
 
@@ -37,6 +36,8 @@ class IrcBot(object):
         self.nick           = nickname
         self.user           = username
         self.real           = realname
+
+        self.master         = master
 
         self.optkey         = optkey
 
@@ -193,23 +194,6 @@ class IrcBot(object):
             if re.compile(line.replace('*', '.*')).search(ident):
                 ret = True
         return ret
-
-    def handle_msg(self, chan, admin, nick, user, host, msg):
-        if len(msg) == 0:
-            return
-        args = msg.split()
-        if admin:
-            if args[0] == '{}reload'.format(self.optkey):
-                ret = recompile(args[1]) # Let you add new code to the bot without restarting it
-                if ret == True:
-                    self.privmsg(chan, "{} recompiled successfully!".format(self.mirc.color(args[1], self.mirc.colors.GREEN)))
-                    return
-                else:
-                    self.privmsg(chan, "Man we had a issue while recompiling {}".format(self.mirc.color(args[1], self.mirc.colors.GREEN)))
-                    self.log.error(ret)
-                    return
-
-        self.cmds.handle_msg(chan, admin, nick, user, host, msg)
 
 
     def privmsg(self, chan, msg):

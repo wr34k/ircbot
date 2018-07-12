@@ -14,10 +14,12 @@ nickname = 'k43rw'
 username = 'wrkslav'
 realname = '** WE BOTTIN **'
 
+master = "wr34k"
+
 optkey= ","
 
 DEBUG = True
 
 if __name__ == '__main__':
     import irc
-    irc.IrcBot(nickname, username, realname, server, port, use_ssl, channels, optkey, DEBUG).init()
+    irc.IrcBot(nickname, username, realname, server, port, use_ssl, channels, master, optkey, DEBUG).init()

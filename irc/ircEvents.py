@@ -16,6 +16,8 @@ def event433(IRC, line):
 def eventJOIN(IRC, line):
     IRC.log.info("{} JOIN to {}".format(line[0], line[2][1:]))
     chan = line[2][1:]
+    if chan not in IRC.ops:
+        IRC.ops[chan] = False
     if IRC.ops[chan]:
         if IRC.isOp(line[0][1:]):
             nick = line[0][1:].split("@")[0].split("!")[0]
@@ -68,6 +70,6 @@ def eventPRIVMSG(IRC, line):
     user        = user[1:] if user[0] == '~' else user
     host        = line[0].split("@")[1]
     try:
-        IRC.handle_msg(line[2], IRC.isAdmin(line[0][1:]), nick, user, host, ' '.join(line[3:])[1:])
+        IRC.cmds.handle_msg(line[2], IRC.isAdmin(line[0][1:]), nick, user, host, ' '.join(line[3:])[1:])
     except:
         pass

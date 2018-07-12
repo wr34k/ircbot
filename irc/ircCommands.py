@@ -7,6 +7,10 @@ class IrcCommands(object):
         self.IRC = IRC
 
     def handle_msg(self, chan, admin, nick, user, host, msg):
+        print(chan)
+        if chan[0] not in ("#","@"):
+            self.IRC.privmsg(self.IRC.master, "PM from {}: {}".format(nick, msg))
+            return
         args = msg.split()
         if args[0][0] == self.IRC.optkey:
             self.handle_cmd(chan, admin, nick, user, host, args[0][1:], args[1:])
